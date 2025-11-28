@@ -1,0 +1,202 @@
+// file: server.cpp
+#include "crow.h"
+#include <nlohmann/json.hpp>
+#include <httplib.h> // or use cpr/curl; show example with httplib
+
+using json = nlohmann::json;
+std::vector<json> PRODUCTS_CACHE;
+
+void fetch_products_from_cms() {
+    // Example: call a headless CMS REST endpoint that returns JSON array of products
+    httplib::Client cli("https://cms.example.com");
+    auto res = cli.Get("/api/products?published=true");
+    if (res && res->status == 200) {
+        try {
+            json arr = json::parse(res->body);
+            PRODUCTS_CACHE.clear();
+            for (auto &p : arr) PRODUCTS_CACHE.push_back(p);
+            CROW_LOG_INFO << "Fetched " << PRODUCTS_CACHE.size() << " products from CMS";
+        } catch (...) {
+            CROW_LOG_ERROR << "Failed parsing CMS response";
+        }
+    } else {
+        CROW_LOG_ERROR << "Failed to fetch CMS products";
+    }
+}
+
+int main()
+{
+    crow::SimpleApp app;
+
+    // basic route to list products
+    CROW_ROUTE(app, "/api/products")
+    ([](){
+        json out = json::array();
+        for (auto &p : PRODUCTS_CACHE) out.push_back(p);
+        crow::response res;
+        res.set_header("Content-Type", "application/json");
+        res.write(out.dump());
+        return res;
+    });
+
+    // create order (simple skeleton)
+    CROW_ROUTE(app, "/api/orders").methods("POST"_method)
+    ([](const crow::request& req){
+        try {
+            auto body = json::parse(req.body);
+            // body should contain: user (or guest), items = [{product_id, qty}]
+            // Validate, compute total, create DB order, call payment provider...
+            json resp = {{"status","created"}, {"order_id", "ord12345"}};
+            return crow::response{resp.dump()};
+        } catch (...) {
+            return crow::response(400, "{\"error\":\"bad request\"}");
+        }
+    });
+
+    // simple admin-only route to trigger CMS sync (in production use webhook + auth)
+    CROW_ROUTE(app, "/admin/sync").methods("POST"_method)
+    ([](){
+        fetch_products_from_cms();
+        return crow::response(200, "{\"ok\":true}");
+    });
+
+    // initial fetch (blocking) - in prod spawn worker thread
+    fetch_products_from_cms();
+
+    app.port(8080).multithreaded().run();
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dark Jumia</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(135deg, #0f0f0f, #1a1a1a, #111);
+            color: #ffffff;
+        }
+
+        header {
+            padding: 25px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            font-size: 36px;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 40px auto;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background: #ff8c00;
+            color: #fff;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            border: none;
+        }
+
+        .btn:hover {
+            background: #ffa733;
+        }
+
+        .grid {
+            margin-top: 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-gap: 25px;
+        }
+
+        .item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+            backdrop-filter: blur(6px);
+            transition: 0.3s;
+        }
+
+        .item:hover {
+            transform: translateY(-6px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .item img {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .item-title {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .price {
+            color: #ff8c00;
+            font-weight: 600;
+            font-size: 17px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>DARK JUMIA</h1>
+        <p>Your professional black-market-style marketplace experience</p>
+    </header>
+
+    <div class="container">
+        <button class="btn" onclick="loadProducts()">Load Products</button>
+
+        <div class="grid" id="productGrid">
+            <!-- Products appear here -->
+        </div>
+    </div>
+
+    <script>
+        async function loadProducts() {
+            const grid = document.getElementById("productGrid");
+            grid.innerHTML = "<p>Loading...</p>";
+
+            try {
+                const res = await fetch("http://localhost:8080/api/products");
+                const data = await res.json();
+
+                grid.innerHTML = "";
+
+                data.forEach(product => {
+                    const div = document.createElement("div");
+                    div.className = "item";
+
+                    div.innerHTML = `
+                        <img src="${product.image || 'https://via.placeholder.com/250'}" />
+                        <div class="item-title">${product.title}</div>
+                        <div class="price">KES ${product.price || '---'}</div>
+                    `;
+
+                    grid.appendChild(div);
+                });
+
+            } catch (error) {
+                grid.innerHTML = "<p style='color:red;'>Failed to fetch products.</p>";
+            }
+        }
+    </script>
+</body>
+</html>
