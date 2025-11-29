@@ -258,6 +258,185 @@ function showShop() {
 
     <div id="result"></div>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dark Jumia</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to bottom right, #000000, #1a1a1a, #330000);
+        color: white;
+    }
+
+    header {
+        text-align: center;
+        padding: 20px;
+        background: #111;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 700px;
+        margin: 40px auto;
+        padding: 20px;
+        background: rgba(0,0,0,0.45);
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(255,0,0,0.3);
+    }
+
+    select, button, input, textarea {
+        width: 100%;
+        padding: 12px;
+        margin-top: 15px;
+        border-radius: 5px;
+        border: none;
+        background: #222;
+        color: white;
+        font-size: 16px;
+    }
+
+    button {
+        background: #cc0000;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #ff0000;
+    }
+
+    .result-box {
+        margin-top: 20px;
+        padding: 15px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 8px;
+    }
+
+    a {
+        color: #ff4d4d;
+        font-weight: bold;
+    }
+
+    h3 {
+        text-align: center;
+        margin-top: 40px;
+        border-bottom: 1px solid #777;
+        padding-bottom: 5px;
+    }
+</style>
+
+<script>
+function findShops() {
+    const product = document.getElementById("product").value;
+    const result = document.getElementById("result");
+
+    if (!product) {
+        result.innerHTML = "<div class='result-box'>Please choose a product.</div>";
+        return;
+    }
+
+    // Determine the user's area
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(success, error);
+    } else {
+        result.innerHTML = "<div class='result-box'>Location not supported.</div>";
+    }
+
+    function success(position) {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+
+        const googleMapsLink =
+            `https://www.google.com/maps/search/${product}+shops+near+me/@${lat},${lng},14z`;
+
+        result.innerHTML = `
+            <div class="result-box">
+                <strong>Product Selected:</strong> ${product.toUpperCase()} <br><br>
+                <strong>Shops Near You:</strong><br>
+                <a href="${googleMapsLink}" target="_blank">View Nearby ${product} Shops on Google Maps</a>
+            </div>
+        `;
+    }
+
+    function error() {
+        // If location blocked or unavailable → use general search
+        const fallbackLink =
+            `https://www.google.com/maps/search/${product}+shops+near+me`;
+
+        result.innerHTML = `
+            <div class="result-box">
+                Unable to detect your exact location.<br><br>
+                <a href="${fallbackLink}" target="_blank">View Nearby ${product} Shops</a>
+            </div>
+        `;
+    }
+}
+
+function submitShop() {
+    const name = document.getElementById("shopName").value;
+    const location = document.getElementById("shopLocation").value;
+    const type = document.getElementById("shopType").value;
+
+    if (!name || !location || !type) {
+        alert("Fill all fields before submitting.");
+        return;
+    }
+
+    alert("Shop registered successfully! We will add it to our database.");
+}
+</script>
+
+</head>
+<body>
+
+<header>DARK JUMIA</header>
+
+<div class="container">
+
+    <h2>Select Product</h2>
+
+    <select id="product">
+        <option value="">-- Choose Product --</option>
+        <option value="shoes">Shoes</option>
+        <option value="phones">Phones</option>
+        <option value="laptops">Laptops</option>
+        <option value="clothes">Clothes</option>
+        <option value="electronics">Electronics</option>
+        <option value="groceries">Groceries</option>
+    </select>
+
+    <button onclick="findShops()">Find Nearby Shops</button>
+
+    <div id="result"></div>
+
+</div>
+
+<!-- SHOP REGISTRATION SECTION -->
+<div class="container">
+
+    <h3>Register Your Shop</h3>
+
+    <input type="text" id="shopName" placeholder="Enter Shop Name">
+    <input type="text" id="shopLocation" placeholder="Enter Shop Location (City / Town)">
+    <input type="text" id="shopType" placeholder="Type of Shop (Shoes, Electronics, etc.)">
+
+    <button onclick="submitShop()">Submit Shop</button>
+
+</div>
+
+  
+
+
+
+</div>
+
 </div>
 
 </body>
