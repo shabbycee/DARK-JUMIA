@@ -384,6 +384,68 @@ function submitShop() {
  
         </div>
         
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Contact - Dark Jumia</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial; margin:0; background:#0b0b0b; color:#fff; }
+  .contact {
+    max-width:760px; margin:60px auto; padding:28px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+    border-radius:12px; box-shadow:0 6px 30px rgba(0,0,0,0.6);
+  }
+  .contact h2 { margin:0 0 10px; font-size:22px; letter-spacing:1px; }
+  .contact p { margin:8px 0 18px; color:#dcdcdc; }
+  .btn {
+    display:inline-block; text-decoration:none; padding:12px 16px; border-radius:10px;
+    font-weight:600; color:#111; background:#25D366; box-shadow:0 4px 12px rgba(37,211,102,0.12);
+  }
+  .call { background:#111; color:#fff; border:1px solid rgba(255,255,255,0.06); margin-left:10px; }
+  .note { margin-top:12px; font-size:13px; color:#bbb; }
+  /* Floating WhatsApp button */
+  .wh-float {
+    position:fixed; right:18px; bottom:18px; z-index:9999;
+    width:60px; height:60px; border-radius:50%; background:#25D366;
+    display:flex; align-items:center; justify-content:center; box-shadow:0 10px 30px rgba(0,0,0,0.4);
+  }
+  .wh-float a { color:#072; text-decoration:none; font-weight:700; }
+  .wh-ico { width:28px; height:28px; display:block; }
+</style>
+</head>
+<body>
+
+<div class="contact">
+  <h2>Reach me on WhatsApp</h2>
+  <p>Have questions or want to order? Tap the WhatsApp button to start a chat.</p>
+
+  <!-- Replace the number in both places if you want international format (no +, no spaces): e.g. 2547XXXXXXXX -->
+  <a class="btn" id="waBtn" href="https://wa.me/0111415383?text=Hello%20I%20am%20interested%20in%20Dark%20Jumia" target="_blank" rel="noopener">
+    Chat on WhatsApp
+  </a>
+
+  <a class="btn call" href="tel:+0111415383">Call: 0111415383</a>
+
+  <div class="note">
+    Tip: If WhatsApp doesn't open, replace the number in the WhatsApp link with the international format (country code + number, no leading zero). Example: Kenya +254...
+  </div>
+</div>
+
+<!-- floating button -->
+<div class="wh-float" aria-hidden="false">
+  <a href="https://wa.me/0111415383?text=Hello%20I%20am%20interested%20in%20Dark%20Jumia" target="_blank" rel="noopener" title="Chat on WhatsApp">
+    <!-- simple SVG WhatsApp icon -->
+    <svg class="wh-ico" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M20.52 3.48A11.86 11.86 0 0012 0C5.37 0 .01 5.37.01 12c0 2.12.56 4.09 1.54 5.83L0 24l6.4-1.67A11.94 11.94 0 0012 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.2-3.48-8.52z" fill="#ffffff" opacity="0.06"/>
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.472-.149-.672.149-.198.297-.767.967-.94 1.163-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.477-.885-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.173.198-.297.298-.495.099-.198 0-.371-.049-.52-.049-.148-.672-1.62-.922-2.22-.242-.583-.487-.504-.672-.514l-.573-.01c-.198 0-.52.074-.792.371s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.08 4.487 3.042 1.333 3.042.888 3.588.833.547-.056 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.413-.074-.123-.273-.198-.57-.347z" fill="#fff"/>
+    </svg>
+  </a>
+</div>
+
+</body>
+</html>
 
     </div>
 
