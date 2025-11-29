@@ -135,7 +135,136 @@
             <div class="item-title">Premium Shades</div>
             <div class="price">KES 1,200</div>
             <button class="buy-btn">Order Now</button>
+       <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dark Jumia</title>
+
+<!-- Professional Background -->
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to bottom right, #0d0d0d, #1a1a1a, #330000);
+        color: white;
+    }
+
+    header {
+        text-align: center;
+        padding: 20px;
+        background: #111;
+        font-size: 28px;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 20px;
+        background: rgba(0,0,0,0.4);
+        border-radius: 10px;
+        backdrop-filter: blur(6px);
+        box-shadow: 0 0 10px rgba(255,0,0,0.3);
+    }
+
+    select, button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 15px;
+        border-radius: 5px;
+        border: none;
+        font-size: 16px;
+    }
+
+    select {
+        background: #222;
+        color: white;
+    }
+
+    button {
+        background: #cc0000;
+        color: white;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    button:hover {
+        background: #ff0000;
+    }
+
+    .result-box {
+        margin-top: 20px;
+        padding: 15px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 8px;
+    }
+
+    a {
+        color: #ff4d4d;
+        font-weight: bold;
+    }
+</style>
+
+<script>
+function showShop() {
+    const product = document.getElementById("product").value;
+    const result = document.getElementById("result");
+
+    let shopLink = "";
+
+    if (product === "shoes") {
+        shopLink = `<a href="https://maps.app.goo.gl/yTkRpA7EF2Z4n3eG6" target="_blank">Nearest Shoe Shop</a>`;
+    } else if (product === "phones") {
+        shopLink = `<a href="https://maps.app.goo.gl/bJvYNyhFqfM8Eqyz8" target="_blank">Nearest Phone Shop</a>`;
+    } else if (product === "laptops") {
+        shopLink = `<a href="https://maps.app.goo.gl/7iD4dTqg6Fi4hdxPA" target="_blank">Nearest Laptop Shop</a>`;
+    } else if (product === "clothes") {
+        shopLink = `<a href="https://maps.app.goo.gl/sF9h5U2p9wBcP6Bt8" target="_blank">Nearest Clothing Store</a>`;
+    } else {
+        shopLink = "Please select a product.";
+    }
+
+    result.innerHTML = `
+        <div class="result-box">
+            <strong>Selected Product:</strong> ${product.toUpperCase()} <br><br>
+            <strong>Nearest Shop:</strong> ${shopLink}
         </div>
+    `;
+}
+</script>
+</head>
+
+<body>
+
+<header>DARK JUMIA</header>
+
+<div class="container">
+
+    <h2>Select a Product</h2>
+
+    <select id="product">
+        <option value="">-- Choose a Product --</option>
+        <option value="shoes">Shoes</option>
+        <option value="phones">Phones</option>
+        <option value="laptops">Laptops</option>
+        <option value="clothes">Clothes</option>
+    </select>
+
+    <button onclick="showShop()">Find Nearest Shop</button>
+
+    <div id="result"></div>
+
+</div>
+
+</body>
+</html>
+ 
+        </div>
+        
 
     </div>
 
